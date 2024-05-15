@@ -58,16 +58,19 @@ async function start() {
             // if gaming transaction & new transaction
             // memo: - = <127
             // memo: + = >128
-            if ((walletTransactions[i].vendorField === '-' || walletTransactions[i].vendorField === '+')
-                && !successTransactions[walletTransactions[i].id]) //isNew tx
+            const amount = walletTransactions[i].amount / 1e8;
+            if ((walletTransactions[i].vendorField === '-' || walletTransactions[i].vendorField === '+') //is game tx
+                && !successTransactions[walletTransactions[i].id] //isNew tx
+                && amount >= config['minBet'] && amount <= config['maxBet'] // is bet range
+            )
             {
                 const rngResult = (await calcRNG(walletTransactions[i].blockId))[0];
                 let isWin = walletTransactions[i].vendorField === '-' ? rngResult < 127 : rngResult > 128;
-                const amountWin = isWin ? (walletTransactions[i].amount / 1e8 * 2) - 1 : 0; // win x2, -1 STH Fee
+                const amountWin = isWin ? (amount * 2) - 1 : 0; // win x2, -1 STH Fee
                 const tx = {
                     blockId: walletTransactions[i].blockId,
                     playerAddress: walletTransactions[i].sender,
-                    amount: walletTransactions[i].amount / 1e8,
+                    amount: amount,
                     bet: walletTransactions[i].vendorField === '-' ? '<127' : '>128',
                     randomNumber: rngResult,
                     isWin: isWin,
@@ -78,7 +81,7 @@ async function start() {
                     await txTransfer({
                         recipientId: tx.playerAddress,
                         amount: tx.amountWin,
-                        memo: 'DICE Winner'
+                        memo: 'DICE Win'
                     })
                 }
                 // save transaction as old
