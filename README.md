@@ -9,7 +9,7 @@ Simple example dice game on SmartHoldem blockchain
 ## Rules for players
 
 Double your bet by guessing a random number, less than 127 or greater than 128.
-The game does not have its own UI and works through the SmartHoldem wallet.
+The game does not have its own UI and works through the SmartHoldem wallet https://wallet.smartholdem.io
 
 To participate in the game, simply send a bet from 2 to 500 to the game bank address SRcse8VH9uqC4DterMfghvtaHdLhHJ9Gi2 and 
 set memo with one symbol + (plus) equivalent > 128 or - (minus) equivalent < 127.
@@ -37,4 +37,13 @@ the first number received is the result of the drawing, example 142
 - git clone https://github.com/smartholdem/dice-game-example.git
 - rename config.json.example to config.json
 - enter in config.json your gameBankAddress SmartHoldem Address example: SRcse8VH9uqC4DterMfghvtaHdLhHJ9Gi2
-- enter gameBankSecret phrase for Game Bank Address in config.json
+- enter gameBankSecret phrase for Game Bank Address in config.json for payments winners
+- file successTxs.json stores old transactions to avoid duplication
+
+Run: 
+
+`cd dice-game-example`
+
+`npm install`
+
+`node index.js`
