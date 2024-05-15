@@ -56,7 +56,13 @@ async function start() {
         const walletTransactions = await getTransactions();
         for (let i = 0; i < walletTransactions.length; i++) {
             // if gaming transaction & new transaction
-            if ((walletTransactions[i].vendorField === '-' || walletTransactions[i].vendorField === '+') && !successTransactions[walletTransactions[i].id]) {
+            // memo: - = <127
+            // memo: + = >128
+            if ((walletTransactions[i].vendorField === '-' || walletTransactions[i].vendorField === '+')
+                && !successTransactions[walletTransactions[i].id] //isNew tx
+                && 1e8 * walletTransactions[i].amount >= config['minBet'] // minBet
+                && 1e8 * walletTransactions[i].amount <= config['maxBet']) //maxBet
+            {
                 const rngResult = (await calcRNG(walletTransactions[i].blockId))[0];
                 let isWin = walletTransactions[i].vendorField === '-' ? rngResult < 127 : rngResult > 128;
                 const amountWin = isWin ? (walletTransactions[i].amount / 1e8 * 2) - 1 : 0; // win x2, -1 STH Fee
@@ -69,7 +75,7 @@ async function start() {
                     isWin: isWin,
                     amountWin: amountWin.toFixed(8),
                 };
-                if (isWin && tx.amount <= 500) {
+                if (isWin && tx.amount <= config['maxBet'] && tx.amount >= config['minBet']) {
                     // transfer prize transaction to winner address
                     await txTransfer({
                         recipientId: tx.playerAddress,

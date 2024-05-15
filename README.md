@@ -3,9 +3,10 @@
 Simple example dice game on SmartHoldem blockchain
 
 ## Requirements 
-NodeJS 18+
+- NodeJS 18+
+- OS Windows, Linux or MacOS
 
-## Rules
+## Rules for players
 
 Double your bet by guessing a random number, less than 127 or greater than 128.
 The game does not have its own UI and works through the SmartHoldem wallet.
@@ -30,3 +31,10 @@ Block ID 8eed48eeeef803c10c7107f89cbaf76efa6aae500ad3bf2378919afc70f5eef8
 and paste hash in https://hasher.smartholdem.io/#/hex-to-bytes
 
 the first number received is the result of the drawing, example 142
+
+## How it works for developers
+- Random numbers are produced by the blockchain as a hexadecimal block hash sequence
+- git clone https://github.com/smartholdem/dice-game-example.git
+- rename config.json.example to config.json
+- enter in config.json your gameBankAddress SmartHoldem Address example: SRcse8VH9uqC4DterMfghvtaHdLhHJ9Gi2
+- enter gameBankSecret phrase for Game Bank Address in config.json
