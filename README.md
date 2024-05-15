@@ -4,6 +4,8 @@ Simple example dice game on SmartHoldem blockchain.
 
 ## What does this example demonstrate?
 
+- no centralized server or static IP required
+- no vulnerable smart contracts
 - connection to the blockchain
 - storage of game statistics
 - selection of winners
