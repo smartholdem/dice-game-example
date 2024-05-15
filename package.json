@@ -18,6 +18,7 @@
     "@smartholdem/client": "^2.0.0",
     "@smartholdem/crypto": "^3.8.3",
     "axios": "^1.6.8",
-    "bip39": "^3.1.0"
+    "bip39": "^3.1.0",
+    "jsonfile": "^6.1.0"
   }
 }
