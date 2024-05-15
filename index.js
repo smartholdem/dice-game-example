@@ -59,9 +59,7 @@ async function start() {
             // memo: - = <127
             // memo: + = >128
             if ((walletTransactions[i].vendorField === '-' || walletTransactions[i].vendorField === '+')
-                && !successTransactions[walletTransactions[i].id] //isNew tx
-                && 1e8 * walletTransactions[i].amount >= config['minBet'] // minBet
-                && 1e8 * walletTransactions[i].amount <= config['maxBet']) //maxBet
+                && !successTransactions[walletTransactions[i].id]) //isNew tx
             {
                 const rngResult = (await calcRNG(walletTransactions[i].blockId))[0];
                 let isWin = walletTransactions[i].vendorField === '-' ? rngResult < 127 : rngResult > 128;
@@ -75,7 +73,7 @@ async function start() {
                     isWin: isWin,
                     amountWin: amountWin.toFixed(8),
                 };
-                if (isWin && tx.amount <= config['maxBet'] && tx.amount >= config['minBet']) {
+                if (isWin) {
                     // transfer prize transaction to winner address
                     await txTransfer({
                         recipientId: tx.playerAddress,
