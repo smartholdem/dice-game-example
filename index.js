@@ -2,14 +2,17 @@ const {Transactions, Managers, Utils} = require("@smartholdem/crypto");
 const {Connection} = require("@smartholdem/client");
 const jsonReader = require("jsonfile");
 const axios = require('axios');
-let lastHeight = 0;
+const {Buffer} = require("node:buffer");
 const config = jsonReader.readFileSync('./config.json');
-
+let successTransactions = jsonReader.readFileSync('./successTxs.json'); // load old transactions
 // init blockchain connection
 const client = new Connection("https://node1.smartholdem.io/api");
 Managers.configManager.setFromPreset("mainnet");
 Managers.configManager.setHeight(1000000);
 
+
+let lastTxs = {};
+let txTimer = null;
 
 // transfer amount to winner
 async function txTransfer(payload) {
@@ -45,11 +48,40 @@ async function getTransactions() {
     return result;
 }
 
+async function calcRNG(blockId) {
+    return (await Uint8Array.from(Buffer.from(blockId, 'hex')));
+}
+
 // Game Start
 async function start() {
-
-
+    let txs = [];
+    clearInterval(txTimer);
+    txTimer = setInterval(async () => {
+        const walletTransactions = await getTransactions();
+        for (let i = 0; i < walletTransactions.length; i++) {
+            // if gaming transaction & new transaction
+            if ((walletTransactions[i].vendorField === '127' || walletTransactions[i].vendorField === '128') && !successTransactions[walletTransactions[i].id]) {
+                const rngResult = (await calcRNG(walletTransactions[i].blockId))[0];
+                let isWin = walletTransactions[i].vendorField === '127' ? rngResult < 127 : rngResult > 128;
+                const amountWin = isWin ? (walletTransactions[i].amount / 1e8 * 2) - 1 : 0; // win x2, -1 STH Fee
+                const tx = {
+                    txId: walletTransactions[i].id,
+                    blockId: walletTransactions[i].blockId,
+                    playerAddress: walletTransactions[i].sender,
+                    amount: walletTransactions[i].amount / 1e8,
+                    bet: walletTransactions[i].vendorField,
+                    randomNumber: rngResult,
+                    isWin: isWin,
+                    amountWin: amountWin,
+                };
+                successTransactions[tx.txId] = tx;
+                jsonReader.writeFileSync('./successTxs.json', successTransactions, ); // save old results in file
+            }
+        }
+        console.log('new txs', txs);
+        txs = [];
+    }, 10000)
 }
 
 
-await start();
+start();
