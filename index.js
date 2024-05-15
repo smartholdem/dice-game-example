@@ -56,20 +56,20 @@ async function start() {
         const walletTransactions = await getTransactions();
         for (let i = 0; i < walletTransactions.length; i++) {
             // if gaming transaction & new transaction
-            if ((walletTransactions[i].vendorField === '127' || walletTransactions[i].vendorField === '128') && !successTransactions[walletTransactions[i].id]) {
+            if ((walletTransactions[i].vendorField === '-' || walletTransactions[i].vendorField === '+') && !successTransactions[walletTransactions[i].id]) {
                 const rngResult = (await calcRNG(walletTransactions[i].blockId))[0];
-                let isWin = walletTransactions[i].vendorField === '127' ? rngResult < 127 : rngResult > 128;
+                let isWin = walletTransactions[i].vendorField === '-' ? rngResult < 127 : rngResult > 128;
                 const amountWin = isWin ? (walletTransactions[i].amount / 1e8 * 2) - 1 : 0; // win x2, -1 STH Fee
                 const tx = {
                     blockId: walletTransactions[i].blockId,
                     playerAddress: walletTransactions[i].sender,
                     amount: walletTransactions[i].amount / 1e8,
-                    bet: walletTransactions[i].vendorField === '127' ? '<127' : '>128',
+                    bet: walletTransactions[i].vendorField === '-' ? '<127' : '>128',
                     randomNumber: rngResult,
                     isWin: isWin,
                     amountWin: amountWin.toFixed(8),
                 };
-                if (isWin && tx.amount <= 2000) {
+                if (isWin && tx.amount <= 500) {
                     // transfer prize transaction to winner address
                     await txTransfer({
                         recipientId: tx.playerAddress,

@@ -1,4 +1,6 @@
 {
   "gameBankAddress": "SMARTHOLDEM_PUBLIC_WALLET_ADDRESS",
-  "gameBankSecret": "ADDRESS_SECRET_PASSPHRASE"
+  "gameBankSecret": "ADDRESS_SECRET_PASSPHRASE",
+  "minBet": 2,
+  "maxBet": 500
 }
