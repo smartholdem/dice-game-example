@@ -20,6 +20,19 @@ the bet is played in the block in which your transaction fell.
 - symbol - = <127
 - symbol + = >128 (example memo https://explorer.smartholdem.io/#/transaction/22de7a868deb6f97ffd158d608d5806dc7f8c52529bfc66f2c37375c8d7c02d1)
 
+- Dice trtansactions in https://wallet.smartholdem.io
+
+![dice-tx](https://github.com/smartholdem/dice-game-example/assets/9394904/687fb180-110e-4185-b7ad-cc60190632f5)
+
+- bet on number < 127 from wallet
+
+![dice-127](https://github.com/smartholdem/dice-game-example/assets/9394904/44ffc3ea-b747-45a1-a3d4-89e6a4af82f2)
+
+- bet on number > 128 from wallet
+
+![dice-128](https://github.com/smartholdem/dice-game-example/assets/9394904/31133e56-b990-40c1-8e45-aea5cd0d5fd0)
+
+
 # Verify
 
 To check the blockchain random winning number you can also use https://hasher.smartholdem.io/#/hex-to-bytes
