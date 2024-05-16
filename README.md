@@ -77,4 +77,5 @@ Run in background mode:
 npm install -g forever
 forever start index.js
 forever list
+forever stop index.js // stop script
 ```
