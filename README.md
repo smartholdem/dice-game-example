@@ -71,3 +71,10 @@ cd dice-game-example
 npm install
 node index.js
 ```
+
+Run in background mode:
+```
+npm install -g forever
+forever start index.js
+forever list
+```
