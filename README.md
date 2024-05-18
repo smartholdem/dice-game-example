@@ -64,7 +64,7 @@ the first number received is the result of the drawing, example `142`
 - enter gameBankSecret phrase for Game Bank Address in config.json for payments winners
 - file successTxs.json stores old transactions to avoid duplication
 
-Run:
+### Run:
 ```
 git clone https://github.com/smartholdem/dice-game-example.git
 cd dice-game-example
@@ -72,7 +72,7 @@ npm install
 node index.js
 ```
 
-Run in background mode:
+###  Run in background mode:
 ```
 npm install -g forever
 forever start index.js
