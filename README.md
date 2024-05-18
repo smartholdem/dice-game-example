@@ -28,8 +28,8 @@ the bet is played in the block in which your transaction fell.
 
 - min bet 2 STH
 - max bet 500 STH
-- symbol `-` = <127
-- symbol `+` = >128 (example with memo https://explorer.smartholdem.io/#/transaction/22de7a868deb6f97ffd158d608d5806dc7f8c52529bfc66f2c37375c8d7c02d1)
+- symbol `-` = bet <127
+- symbol `+` = bet >128 (example with memo https://explorer.smartholdem.io/#/transaction/22de7a868deb6f97ffd158d608d5806dc7f8c52529bfc66f2c37375c8d7c02d1)
 
 - Dice trtansactions in https://wallet.smartholdem.io
 

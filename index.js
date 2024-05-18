@@ -3,6 +3,9 @@ const {Connection} = require("@smartholdem/client");
 const jsonReader = require("jsonfile");
 const axios = require('axios');
 const {Buffer} = require("node:buffer");
+const {
+    randomInt,
+} = require('node:crypto');
 const config = jsonReader.readFileSync('./config.json');
 let successTransactions = jsonReader.readFileSync('./successTxs.json'); // load old transactions
 // init blockchain connection
@@ -24,7 +27,7 @@ async function txTransfer(payload) {
         .vendorField(payload.memo) // message for winner
         .sign(config['gameBankSecret']); //
     txs.push(transaction.build().toJson());
-    console.log('Prepared tx', txs[0]);
+    //console.log('Prepared tx', txs[0]);
     let broadcastResponse = {};
     try {
         broadcastResponse = (await client.api("transactions").create({transactions: txs})).body.data;
@@ -45,11 +48,14 @@ async function getTransactions() {
 }
 
 async function calcRNG(blockId) {
-    return (await Uint8Array.from(Buffer.from(blockId, 'hex')));
+    const rnd = await Uint8Array.from(Buffer.from(blockId, 'hex'));
+    console.log(rnd);
+    return (rnd);
 }
 
 // Game Start
 async function start() {
+    console.log('app running with bank address', config['gameBankAddress']);
     let txTimer = null;
     clearInterval(txTimer);
     txTimer = setInterval(async () => {
