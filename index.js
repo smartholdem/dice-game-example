@@ -9,7 +9,7 @@ const {
 const config = jsonReader.readFileSync('./config.json');
 let successTransactions = jsonReader.readFileSync('./successTxs.json'); // load old transactions
 // init blockchain connection
-const client = new Connection("https://node1.smartholdem.io/api");
+const client = new Connection(config.node);
 Managers.configManager.setFromPreset("mainnet");
 Managers.configManager.setHeight(1000000);
 
@@ -40,7 +40,7 @@ async function txTransfer(payload) {
 async function getTransactions() {
     let result = null;
     try {
-        result = (await axios.get('https://node0.smartholdem.io/api/transactions?recipientId=' + config['gameBankAddress'] + '&page=1&limit=10&type=0')).data.data;
+        result = (await axios.get(config.node + '/transactions?recipientId=' + config['gameBankAddress'] + '&page=1&limit=10&type=0')).data.data;
     } catch (e) {
         console.log('err get transactions')
     }

@@ -1,4 +1,5 @@
 {
+  "node": "https://node1.smartholdem.io/api",
   "gameBankAddress": "SMARTHOLDEM_PUBLIC_WALLET_ADDRESS",
   "gameBankSecret": "ADDRESS_SECRET_PASSPHRASE",
   "minBet": 2,
