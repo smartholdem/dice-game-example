@@ -19,7 +19,7 @@ async function txTransfer(payload) {
     const senderWallet = await client.api("wallets").get(config['gameBankAddress']);
     const senderNonce = Utils.BigNumber.make(senderWallet.body.data.nonce).plus(1);
     const transaction = Transactions.BuilderFactory.transfer()
-        .fee((1e8 * 1).toString()) // fee
+        .fee((1e8 * config['fee']).toString()) // fee
         .version(2)
         .nonce(senderNonce.toFixed()) // nonce
         .recipientId(payload.recipientId) // winner address
@@ -73,11 +73,12 @@ async function start() {
                 const rngResult = (await calcRNG(walletTransactions[i].blockId))[0];
                 let isWin = walletTransactions[i].vendorField === '-' ? rngResult < 127 : rngResult > 128;
                 const amountWin = isWin ? (amount * 2) - 1 : 0; // win x2, -1 STH Fee
+                const bet = walletTransactions[i].vendorField === '-' ? '<127' : '>128';
                 const tx = {
                     blockId: walletTransactions[i].blockId,
                     playerAddress: walletTransactions[i].sender,
                     amount: amount,
-                    bet: walletTransactions[i].vendorField === '-' ? '<127' : '>128',
+                    bet: bet,
                     randomNumber: rngResult,
                     isWin: isWin,
                     amountWin: amountWin.toFixed(8),
@@ -87,7 +88,7 @@ async function start() {
                     await txTransfer({
                         recipientId: tx.playerAddress,
                         amount: tx.amountWin,
-                        memo: 'DICE Win'
+                        memo: 'DICE Win:' + bet + ':' + rngResult
                     })
                 }
                 // save transaction as old
